@@ -1,0 +1,23 @@
+# https://kubernetes.io/docs/concepts/services-networking/ingress/#the-ingress-resource
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: spring-app-controller
+  namespace: default
+  annotations:
+    # https://kubernetes.github.io/ingress-nginx/examples/rewrite/
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: demo.localdev.me
+    http:
+      paths:
+      - path: /spring-app(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: spring-app
+            port:
+              number: 8080
